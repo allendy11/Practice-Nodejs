@@ -3,21 +3,28 @@ const koaSession = require("koa-session");
 const koaSessionMysql = require("koa-session-mysql");
 
 exports.login = async (ctx, next) => {
-  console.log("body", ctx.request.body);
-  const { username, password } = ctx.request.body;
-  if ((username === "qwer") & (password === "1231")) {
-    ctx.session.user = { username, password };
-    ctx.session.authorized = true;
-    console.log("koa-login", Object.entries(ctx.session));
-
-    ctx.status = 200;
-    ctx.body = {
-      message: "login success",
-    };
-  } else {
-    ctx.status = 404;
-    ctx.body = { message: "not found" };
+  console.log("ctx.request.body : ", ctx.request.body);
+  const { username, password, client_type } = ctx.request.body;
+  const conn = await db.promise().getConnection(async (conn) => conn);
+  const selectUserQuery = `SELECT * FROM user WHERE username = ? AND password = ?`;
+  const [selectUserRows] = await conn.query(selectUserQuery, [
+    username,
+    password,
+  ]);
+  if (selectUserRows.length === 0) {
+    ctx.throw(404, "Not Found");
   }
+  console.log("selectUserRwos: ", selectUserRows[0]);
+  ctx.session.user = { username, password };
+  ctx.session.authorized = true;
+  // console.log("koa-login", Object.entries(ctx.session));
+
+  ctx.status = 200;
+  ctx.body = {
+    username,
+    password,
+    client_type,
+  };
 };
 exports.logout = async (ctx, next) => {
   console.log("koa-logout", Object.entries(ctx.session));
