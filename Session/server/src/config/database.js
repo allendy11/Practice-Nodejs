@@ -2,11 +2,11 @@ const path = require("path");
 const dotenv = require("dotenv");
 const mysql = require("mysql2");
 
-// if (process.env.NODE_ENV == "production") {
-//   dotenv.config({ path: path.join(__dirname, "../../.env.production") });
-// } else if (process.env.NODE_ENV == "development") {
-//   dotenv.config({ path: path.join(__dirname, "../../.env.development") });
-// }
+if (process.env.NODE_ENV == "production") {
+  dotenv.config({ path: path.join(__dirname, "../../.env.production") });
+} else if (process.env.NODE_ENV == "development") {
+  dotenv.config({ path: path.join(__dirname, "../../.env.development") });
+}
 
 const mysqlOption = {
   host: "localhost",

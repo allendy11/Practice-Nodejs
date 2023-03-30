@@ -8,11 +8,11 @@ const { db, mysqlOption } = require("./config/database");
 const koaSession = require("koa-session");
 const mysql = require("mysql-magic");
 const koaSessionMysql = require("koa-session-mysql");
-
-const userRouter = require("./routes/user.routes");
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
+
+const userRouter = require("./routes/user.routes");
 
 const PORT = 8000;
 
@@ -74,7 +74,7 @@ app.use(async (ctx, next) => {
 
     ctx.session.views = 1;
   }
-  console.log("koa-session", Object.entries(ctx.session));
+  // console.log("koa-session", Object.entries(ctx.session));
   ctx.body = ctx.session.views;
 
   await next();
