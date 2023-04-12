@@ -8,13 +8,10 @@ const { db, mysqlOption } = require("./config/database");
 const koaSession = require("koa-session");
 const mysql = require("mysql-magic");
 const koaSessionMysql = require("koa-session-mysql");
-const http = require("http");
-const https = require("https");
-const fs = require("fs");
 
 const userRouter = require("./routes/user.routes");
 
-const PORT = 8000;
+const PORT = 4000;
 
 mysql.initPool("koa-session", {
   host: "localhost",
@@ -31,6 +28,10 @@ app.keys = ["1234567890"];
 // bodyparser
 app.use(bodyParser());
 
+// router
+const router = new Router();
+app.use(router.routes()).use(router.allowedMethods());
+
 // cors
 app.use(
   cors({
@@ -44,10 +45,12 @@ app.use(
 app.use(
   koaSession(
     {
+      // // secret: "asdfasd",
+      // // name: "koa-session-id",
       key: "koa.sess",
       store: koaSessionMysql,
       maxAge: 1000 * 60 * 30,
-      secure: true,
+      secure: false,
       overwrite: true /** (boolean) can overwrite or not (default true) */,
       httpOnly: false /** (boolean) httpOnly or not (default true) */,
       signed: true /** (boolean) signed or not (default true) */,
@@ -67,32 +70,23 @@ app.use(async (ctx, next) => {
 
 app.use(async (ctx, next) => {
   if (ctx.session.views) {
-    console.log("exist");
+    console.log("koa session exist");
     ctx.session.views += 1;
+    ctx.body = ctx.session.views;
   } else {
-    console.log("not exist");
+    console.log("koa session not exist");
 
     ctx.session.views = 1;
+    ctx.body = ctx.session.views;
   }
-  // console.log("koa-session", Object.entries(ctx.session));
-  ctx.body = ctx.session.views;
+  console.log("koa-session", Object.entries(ctx.session));
 
+  // console.log("koa-session", ctx.session);
   await next();
 });
 
-const router = new Router();
-app.use(router.routes()).use(router.allowedMethods());
-
 router.use("/user", userRouter.routes());
 
-var options = {
-  key: fs.readFileSync("./key.pem"),
-  cert: fs.readFileSync("./cert.pem"),
-};
-
-https.createServer(options, app.callback()).listen(PORT, () => {
-  console.log(`listen on ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`listening on port PORT ${PORT}`);
 });
-// app.listen(PORT, () => {
-//   console.log(`listening on port PORT ${PORT}`);
-// });
