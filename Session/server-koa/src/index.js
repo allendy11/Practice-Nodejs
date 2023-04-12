@@ -4,7 +4,6 @@ const bodyParser = require("koa-bodyparser");
 const cors = require("@koa/cors");
 const dotenv = require("dotenv");
 const path = require("path");
-const { db, mysqlOption } = require("./config/database");
 const koaSession = require("koa-session");
 const mysql = require("mysql-magic");
 const koaSessionMysql = require("koa-session-mysql");
@@ -12,16 +11,17 @@ const http = require("http");
 const https = require("https");
 const fs = require("fs");
 
+// config
+const { session_option, keyGrip } = require("./config/session");
+const { db, mysqlOption } = require("./config/database");
+
+// router
 const userRouter = require("./routes/user.routes");
+const apiRouter = require("./routes/api.routes");
 
 const PORT = 8000;
 
-mysql.initPool("koa-session", {
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "testdb",
-});
+mysql.initPool("koa-session", mysqlOption);
 
 koaSessionMysql.init("koa-session", "session");
 
@@ -41,23 +41,7 @@ app.use(
 );
 
 // session
-app.use(
-  koaSession(
-    {
-      key: "koa.sess",
-      store: koaSessionMysql,
-      maxAge: 1000 * 60 * 30,
-      secure: true,
-      overwrite: true /** (boolean) can overwrite or not (default true) */,
-      httpOnly: false /** (boolean) httpOnly or not (default true) */,
-      signed: true /** (boolean) signed or not (default true) */,
-      rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
-      renew: true /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/,
-      sameSite: "none",
-    },
-    app
-  )
-);
+app.use(koaSession(session_option, app));
 
 // log
 app.use(async (ctx, next) => {
@@ -84,6 +68,7 @@ const router = new Router();
 app.use(router.routes()).use(router.allowedMethods());
 
 router.use("/user", userRouter.routes());
+router.use("/api", apiRouter.routes());
 
 var options = {
   key: fs.readFileSync("./key.pem"),

@@ -11,8 +11,9 @@ if (process.env.NODE_ENV == "production") {
 const mysqlOption = {
   host: "localhost",
   user: "root",
-  password: "",
+  password: "1231",
   database: "testdb",
+  port: "3306",
   // connectionLimit: "",
   // socketPath: process.env.MYSQL_SOCKET_PATH,
   // ssl: {
@@ -22,7 +23,7 @@ const mysqlOption = {
   // },
   // timezone: "+00:00",
 };
-
+console.log(mysqlOption);
 const db = mysql.createPool({ ...mysqlOption });
 
 module.exports = {
