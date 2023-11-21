@@ -1,0 +1,27 @@
+#CKEditor .container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#CKEditor .container .editor-box {
+  width: 100%;
+  height: 50rem;
+  display: flex;
+  justify-content: center;
+}
+
+#CKEditor .container .editor-box .ck-editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#CKEditor .container .editor-box .ck-editor__main {
+  height: 100%;
+}
+#CKEditor .container .editor-box .ck-content {
+  height: 100%;
+
+}

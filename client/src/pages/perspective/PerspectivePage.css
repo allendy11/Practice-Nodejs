@@ -1,0 +1,25 @@
+#PerspectivePage .container {
+  background: rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50rem;
+  height: 30rem;
+  /* perspective: 1000px; */
+  /* perspective: 500px; */
+}
+
+#PerspectivePage .box {
+  display: flex;
+  border: 1px solid black;
+}
+#PerspectivePage .card {
+  width: 100px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: red;
+  font-size: 1.5rem;
+  transform: perspective(100px) rotateY(45deg) rotateX(45deg);
+}

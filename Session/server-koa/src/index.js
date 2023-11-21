@@ -16,14 +16,14 @@ const userRouter = require("./routes/user.routes");
 
 const PORT = 8000;
 
-mysql.initPool("koa-session", {
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "testdb",
-});
+// mysql.initPool("koa-session", {
+//   host: "localhost",
+//   user: "root",
+//   password: "1231",
+//   database: "testdb",
+// });
 
-koaSessionMysql.init("koa-session", "session");
+// koaSessionMysql.init("koa-session", "session");
 
 const app = new Koa();
 app.keys = ["1234567890"];
@@ -41,23 +41,23 @@ app.use(
 );
 
 // session
-app.use(
-  koaSession(
-    {
-      key: "koa.sess",
-      store: koaSessionMysql,
-      maxAge: 1000 * 60 * 30,
-      secure: true,
-      overwrite: true /** (boolean) can overwrite or not (default true) */,
-      httpOnly: false /** (boolean) httpOnly or not (default true) */,
-      signed: true /** (boolean) signed or not (default true) */,
-      rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
-      renew: true /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/,
-      sameSite: "none",
-    },
-    app
-  )
-);
+// app.use(
+//   koaSession(
+//     {
+//       key: "koa.sess",
+//       store: koaSessionMysql,
+//       maxAge: 1000 * 60 * 30,
+//       secure: true,
+//       overwrite: true /** (boolean) can overwrite or not (default true) */,
+//       httpOnly: false /** (boolean) httpOnly or not (default true) */,
+//       signed: true /** (boolean) signed or not (default true) */,
+//       rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
+//       renew: true /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/,
+//       sameSite: "none",
+//     },
+//     app
+//   )
+// );
 
 // log
 app.use(async (ctx, next) => {

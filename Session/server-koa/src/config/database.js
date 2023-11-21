@@ -11,7 +11,7 @@ if (process.env.NODE_ENV == "production") {
 const mysqlOption = {
   host: "localhost",
   user: "root",
-  password: "",
+  password: "1231",
   database: "testdb",
   // connectionLimit: "",
   // socketPath: process.env.MYSQL_SOCKET_PATH,
